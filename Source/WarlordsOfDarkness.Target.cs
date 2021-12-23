@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 public class WarlordsOfDarknessTarget : TargetRules
 {
-	public WarlordsOfDarknessTarget(TargetInfo Target) : base(Target)
+	public WarlordsOfDarknessTarget( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.Add("WarlordsOfDarkness");
+		ExtraModuleNames.AddRange( new string[] { "WarlordsOfDarkness" } );
 	}
 }

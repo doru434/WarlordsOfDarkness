@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 public class WarlordsOfDarknessEditorTarget : TargetRules
 {
-	public WarlordsOfDarknessEditorTarget(TargetInfo Target) : base(Target)
+	public WarlordsOfDarknessEditorTarget( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.Add("WarlordsOfDarkness");
+		ExtraModuleNames.AddRange( new string[] { "WarlordsOfDarkness" } );
 	}
 }
