@@ -67,8 +67,11 @@ Build/*/**
 Saved/*
 
 # Compiled source files for the engine to use
+Content/StarterContent/*
 Intermediate/*
-Plugins/*/Intermediate/*
-
+Plugins/*
 # Cache files for the editor to use
 DerivedDataCache/*
+
+Plugins/Developer/*
+Plugins/HoudiniEngine/*
