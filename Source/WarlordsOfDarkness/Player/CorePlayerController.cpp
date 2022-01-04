@@ -3,13 +3,14 @@
 
 #include "WarlordsOfDarkness/Player/CorePlayerController.h"
 #include "Kismet/GameplayStatics.h"
-#include "WarlordsOfDarkness/Player/PlayerCamera.h"
+#include "WarlordsOfDarkness/Player/PlayerPawn.h"
 
 #include "Runtime/Engine/Classes/Components/DecalComponent.h"
 
 #include "Components/CanvasPanelSlot.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
 #include "Engine/World.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "WarlordsOfDarkness/Systems/Selection/SelectionVolumeBox.h"
 
 ACorePlayerController::ACorePlayerController()
@@ -61,10 +62,10 @@ void ACorePlayerController::SetupInputComponent()
 void ACorePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	APlayerCamera* CameraPawn = Cast<APlayerCamera>(GetPawn());
-	if (CameraPawn)
+	APlayerPawn* PlayerPawn = Cast<APlayerPawn>(GetPawn());
+	if (PlayerPawn)
 	{
-		CameraPawn->SpringArmComponent->SetRelativeRotation(FMath::Lerp(MinCameraRotation, MaxCameraRotation, (CameraPawn->SpringArmComponent->TargetArmLength - MinCameraHeight) / (MaxCameraHeight - MinCameraHeight)));
+		PlayerPawn->SpringArmComponent->SetRelativeRotation(FMath::Lerp(MinCameraRotation, MaxCameraRotation, (PlayerPawn->SpringArmComponent->TargetArmLength - MinCameraHeight) / (MaxCameraHeight - MinCameraHeight)));
 	}
 }
 // End PlayerController interface
@@ -167,27 +168,27 @@ void ACorePlayerController::MoveCameraByMouse()
 // Camera rotation functions
 void ACorePlayerController::ZoomCamera(float Amount)
 {
-	APlayerCamera* CameraPawn;
+	APlayerPawn* PlayerPawn;
 	if (Amount)
 	{
-		CameraPawn = Cast<APlayerCamera>(GetPawn());
-		if (CameraPawn)
+		PlayerPawn = Cast<APlayerPawn>(GetPawn());
+		if (PlayerPawn)
 		{
 			if (Amount > 0)
 			{
-				if (CameraPawn->SpringArmComponent->TargetArmLength + (Amount * CameraZoomingSpeed) <= MaxCameraHeight)
+				if (PlayerPawn->SpringArmComponent->TargetArmLength + (Amount * CameraZoomingSpeed) <= MaxCameraHeight)
 				{
-					CameraPawn->SpringArmComponent->TargetArmLength = CameraPawn->SpringArmComponent->TargetArmLength + (Amount * CameraZoomingSpeed);
+					PlayerPawn->SpringArmComponent->TargetArmLength = PlayerPawn->SpringArmComponent->TargetArmLength + (Amount * CameraZoomingSpeed);
 				}
 			}
 			else
 			{
-				if (CameraPawn->SpringArmComponent->TargetArmLength - (Amount * CameraZoomingSpeed) >= MinCameraHeight)
+				if (PlayerPawn->SpringArmComponent->TargetArmLength - (Amount * CameraZoomingSpeed) >= MinCameraHeight)
 				{
-					CameraPawn->SpringArmComponent->TargetArmLength = CameraPawn->SpringArmComponent->TargetArmLength + (Amount * CameraZoomingSpeed);
+					PlayerPawn->SpringArmComponent->TargetArmLength = PlayerPawn->SpringArmComponent->TargetArmLength + (Amount * CameraZoomingSpeed);
 				}
 			}
-			CameraPawn->SpringArmComponent->SetRelativeRotation(FMath::Lerp(MinCameraRotation, MaxCameraRotation, (CameraPawn->SpringArmComponent->TargetArmLength - MinCameraHeight) / (MaxCameraHeight - MinCameraHeight)));
+			PlayerPawn->SpringArmComponent->SetRelativeRotation(FMath::Lerp(MinCameraRotation, MaxCameraRotation, (PlayerPawn->SpringArmComponent->TargetArmLength - MinCameraHeight) / (MaxCameraHeight - MinCameraHeight)));
 		}
 	}
 }
@@ -198,15 +199,15 @@ void ACorePlayerController::ZoomCameraByMouse()
 }
 void ACorePlayerController::RotateCamera(float Amount)
 {
-	APlayerCamera* CameraPawn;
+	APlayerPawn* PlayerPawn;
 	if (Amount != 0)
 	{
-		CameraPawn = Cast<APlayerCamera>(GetPawn());
-		if (CameraPawn)
+		PlayerPawn = Cast<APlayerPawn>(GetPawn());
+		if (PlayerPawn)
 		{
-			FRotator Rotation = CameraPawn->GetActorRotation();
+			FRotator Rotation = PlayerPawn->GetActorRotation();
 			Rotation.Yaw = Rotation.Yaw + Amount;
-			CameraPawn->SetActorRotation(Rotation);
+			PlayerPawn->SetActorRotation(Rotation);
 		}
 	}
 }
@@ -219,11 +220,11 @@ void ACorePlayerController::ResetRotation()
 {
 	if (!bCameraMovementMouseButtonPressed)
 	{
-		APlayerCamera* CameraPawn = Cast<APlayerCamera>(GetPawn());
-		if (CameraPawn)
+		APlayerPawn* PlayerPawn = Cast<APlayerPawn>(GetPawn());
+		if (PlayerPawn)
 		{
 			FRotator Rotation = FRotator(0.f, 0.f, 0.f);
-			CameraPawn->SetActorRotation(Rotation);
+			PlayerPawn->SetActorRotation(Rotation);
 		}
 	}
 }

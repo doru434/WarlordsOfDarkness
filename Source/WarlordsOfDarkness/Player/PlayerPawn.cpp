@@ -1,12 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "WarlordsOfDarkness/Player/PlayerCamera.h"
+#include "WarlordsOfDarkness/Player/PlayerPawn.h"
+
+#include "Camera/CameraComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
-APlayerCamera::APlayerCamera()
+APlayerPawn::APlayerPawn()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
@@ -24,23 +28,25 @@ APlayerCamera::APlayerCamera()
 }
 
 // Called when the game starts or when spawned
-void APlayerCamera::BeginPlay()
+void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void APlayerCamera::Tick(float DeltaTime)
+void APlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
 // Called to bind functionality to input
-void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+
+
 

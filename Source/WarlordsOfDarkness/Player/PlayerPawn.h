@@ -3,20 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Camera/CameraComponent.h"
-#include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/Pawn.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "PlayerCamera.generated.h"
+#include "PlayerPawn.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
+class UFloatingPawnMovement;
 UCLASS()
-class WARLORDSOFDARKNESS_API APlayerCamera : public APawn
+class WARLORDSOFDARKNESS_API APlayerPawn : public APawn
 {
 	GENERATED_BODY()
-
 	public:
 	// Sets default values for this pawn's properties
-	APlayerCamera();
+	APlayerPawn();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UCameraComponent* CameraComponent;
