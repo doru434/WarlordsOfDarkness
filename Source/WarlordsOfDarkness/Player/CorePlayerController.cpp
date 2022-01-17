@@ -6,12 +6,9 @@
 #include "WarlordsOfDarkness/Player/PlayerPawn.h"
 
 #include "Runtime/Engine/Classes/Components/DecalComponent.h"
-
-#include "Components/CanvasPanelSlot.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
-#include "Engine/World.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "WarlordsOfDarkness/Systems/Selection/SelectionVolumeBox.h"
+#include "WarlordsOfDarkness/Systems/Selection/SelectionInterface.h"
 
 ACorePlayerController::ACorePlayerController()
 {
@@ -51,7 +48,6 @@ void ACorePlayerController::SetupInputComponent()
 	InputComponent->BindAction("MouseCameraMovementKey", IE_Pressed, this, &ACorePlayerController::MouseCameraMovementActivation);
 	InputComponent->BindAction("MouseCameraMovementKey", IE_Released, this, &ACorePlayerController::MouseCameraMovementDeactivation);
 	InputComponent->BindAction("ResetRotation", IE_Pressed, this, &ACorePlayerController::ResetRotation);
-	InputComponent->BindAction("MouseSelection", IE_Pressed, this, &ACorePlayerController::MouseSelection);
 	InputComponent->BindAction("MouseAction", IE_Pressed, this, &ACorePlayerController::MouseAction);
 
 	//Axis
@@ -121,12 +117,6 @@ void ACorePlayerController::MouseCameraMovementDeactivation()
 	bCameraMovementMouseButtonPressed = false;
 	BaseMousePosition.X = 0;
 	BaseMousePosition.Y = 0;
-}
-void ACorePlayerController::MouseSelection()
-{
-	FVector TraceLocation = GetTraceUnderCursor();
-
-
 }
 void ACorePlayerController::MouseAction()
 {
@@ -235,88 +225,19 @@ void ACorePlayerController::ResetRotation()
 FVector ACorePlayerController::GetTraceUnderCursor()
 {
 	FHitResult Hit;
-	GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery1, true, Hit);
+	GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery19, true, Hit);
 
 	if (Hit.bBlockingHit)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("TraceLocation %f %f %f\t"), Hit.ImpactPoint.X, Hit.ImpactPoint.Y, Hit.ImpactPoint.Z);
+		if(Cast<ISelectionInterface>(Hit.GetActor()))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("SelectionInterface!"));
+			Cast<ISelectionInterface>(Hit.GetActor())->ISelectionInterface::Execute_SelectActor(Hit.GetActor());
+			
+		}
+
 		return Hit.ImpactPoint;
 	}
 	return FVector(0, 0, 0);
-}
-FVector2D ACorePlayerController::CalculateSelectionBoxSize(UCanvasPanelSlot* Slot, float BaseX, float BaseY)
-{
-	FVector2D ImageSize = FVector2D(1,1);
-	float X;
-	float Y;
-	this->GetMousePosition(X,Y);
-	FVector2D BaseVector = FVector2D(BaseX, BaseY);
-	FVector2D ActualVector = FVector2D(X, Y);
-	ImageSize = ActualVector - BaseVector;
-	const FVector2D viewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-	const float viewportScale = GetDefault<UUserInterfaceSettings>(UUserInterfaceSettings::StaticClass())->GetDPIScaleBasedOnSize(FIntPoint(viewportSize.X, viewportSize.Y));
-	ImageSize = ImageSize / viewportScale;
-	//SpawnVolumeSelectionBox(ImageSize, BaseVector);
-	return ImageSize;
-}
-
-void ACorePlayerController::SpawnVolumeSelectionBox(FVector2D Size, FVector2D MouseLocation)
-{
-	if(!SelectionVolumeBox)
-	{
-		FVector WorldLocation;
-		FVector WorldDirection;
-		DeprojectScreenPositionToWorld(MouseLocation.X, MouseLocation.Y,WorldLocation,WorldDirection);
-		WorldLocation.Z = 200;
-		FActorSpawnParameters SpawnInfo;
-		SelectionVolumeBox = GetWorld()->SpawnActor<ASelectionVolumeBox>(WorldLocation, FRotator(WorldDirection.X,WorldDirection.Y,WorldDirection.Z), SpawnInfo);
-	}
-	else
-	{
-		FVector WorldLocation;
-		FVector WorldDirection;
-		DeprojectScreenPositionToWorld(MouseLocation.X, MouseLocation.Y,WorldLocation,WorldDirection);
-		WorldLocation.Z = 200;
-		SelectionVolumeBox->SetActorLocation(WorldLocation);
-		SelectionVolumeBox->SetActorRotation(FRotator(WorldDirection.X,WorldDirection.Y,WorldDirection.Z));
-		
-		SelectionVolumeBox->BoxComponent->SetBoxExtent(FVector(Size-MouseLocation,0));
-		FVector BoxScale = SelectionVolumeBox->BoxComponent->GetScaledBoxExtent();
-		BoxScale= BoxScale/100;
-		BoxScale.X = 2*abs(BoxScale.X);
-		BoxScale.Y = 2*abs(BoxScale.Y);
-		BoxScale.Z = 2*abs(BoxScale.Z);
-		SelectionVolumeBox->MeshComponent->SetWorldScale3D(BoxScale);
-	}
-}
-
-void ACorePlayerController::CreateVolumeSelectionBox(FVector Start, FVector End)
- {
-	FVector Bounds = End-Start;
-	Bounds = Bounds / 2;
-	Bounds.Z = 50;
-	if(!SelectionVolumeBox)
-	{
-		FActorSpawnParameters SpawnInfo;
-		SelectionVolumeBox = GetWorld()->SpawnActor<ASelectionVolumeBox>(Start, FRotator(0,0,0), SpawnInfo);
-		
-	}
-	else
-	{
-		FVector Location = ((End-Start)/2)+Start;
-		Location. Z = 150;
-		SelectionVolumeBox->SetActorLocation(Location);	
-		SelectionVolumeBox->BoxComponent->SetBoxExtent(Bounds);
-		FVector BoxScale = SelectionVolumeBox->BoxComponent->GetScaledBoxExtent();
-		BoxScale= BoxScale/100;
-		BoxScale.X = 2*abs(BoxScale.X);
-		BoxScale.Y = 2*abs(BoxScale.Y);
-		BoxScale.Z = 2*abs(BoxScale.Z);
-		SelectionVolumeBox->MeshComponent->SetWorldScale3D(BoxScale);
-	}
-}
-
-void ACorePlayerController::SelectActorsWithBox()
-{
-	SelectionVolumeBox->GetAllSelectableActors();
 }

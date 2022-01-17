@@ -7,7 +7,7 @@
 #include "SelectionInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, Blueprintable)
 class USelectionInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -22,5 +22,9 @@ class WARLORDSOFDARKNESS_API ISelectionInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 	public:
-	virtual void SelectActor();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void SelectActor();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void UnselectActor();
 };

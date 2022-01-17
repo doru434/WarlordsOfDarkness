@@ -20,37 +20,35 @@ public:
 protected:
 	// Camera properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float ScreenMargin = 40.f;
+	float ScreenMargin = 40.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float CameraSpeed = 2.f;
+	float CameraSpeed = 2.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float RotationSpeed = 1.f;
+	float RotationSpeed = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float CameraZoomingSpeed = 40;
+	float CameraZoomingSpeed = 40;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MaxCameraHeight = 2400.f;
+	float MaxCameraHeight = 2400.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MinCameraHeight = 600.f;
+	float MinCameraHeight = 600.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FRotator MinCameraRotation = FRotator(-35.f, 0.f, 0.f);
+	FRotator MinCameraRotation = FRotator(-35.f, 0.f, 0.f);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FRotator MaxCameraRotation = FRotator(-70.f, 0.f, 0.f);
+	FRotator MaxCameraRotation = FRotator(-70.f, 0.f, 0.f);
 
 	UPROPERTY()
-		bool bCameraMovementMouseButtonPressed = false;
+	bool bCameraMovementMouseButtonPressed = false;
 	UPROPERTY()
-		FVector2D BaseMousePosition = FVector2D(0.f, 0.f);
+	FVector2D BaseMousePosition = FVector2D(0.f, 0.f);
 	UPROPERTY()
-		FVector2D DeltaMousePosition = FVector2D(0.f, 0.f);
-	UPROPERTY()
-	class ASelectionVolumeBox*  SelectionVolumeBox;
+	FVector2D DeltaMousePosition = FVector2D(0.f, 0.f);
 
 	// End camera properties
 
@@ -77,8 +75,7 @@ protected:
 		void MouseCameraMovementActivation();
 	UFUNCTION()
 		void MouseCameraMovementDeactivation();
-	UFUNCTION()
-	void MouseSelection();
+
 	UFUNCTION()
 	void MouseAction();
 
@@ -102,15 +99,5 @@ protected:
 	// Selection functions
 	UFUNCTION(BlueprintCallable)
 	FVector GetTraceUnderCursor();
-
-
-	UFUNCTION(BlueprintCallable)
-	FVector2D CalculateSelectionBoxSize(UCanvasPanelSlot* Slot, float BaseX, float BaseY);
-	void SpawnVolumeSelectionBox(FVector2D Size, FVector2D MouseLocation);
 	
-	UFUNCTION(BlueprintCallable)
-	void CreateVolumeSelectionBox(FVector Start, FVector End);
-
-	UFUNCTION(BlueprintCallable)
-	void SelectActorsWithBox();
 };

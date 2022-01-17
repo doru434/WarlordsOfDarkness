@@ -28,7 +28,9 @@ class WARLORDSOFDARKNESS_API APlayerPawn : public APawn
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UFloatingPawnMovement* FloatingPawnMovement;
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TArray <AActor*> SelectedActors;
 	protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
