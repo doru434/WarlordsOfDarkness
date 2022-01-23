@@ -13,11 +13,7 @@ ABaseCharacter::ABaseCharacter()
 	SelectionDecalComponent->SetupAttachment(RootComponent);
 	SelectionDecalComponent->SetRelativeRotation(FRotator(90.f,0.f,0.f));
 	SelectionDecalComponent->SetRelativeLocation(FVector(0.f,0.f,-90.f));
-	ConstructorHelpers::FObjectFinder<UMaterialInstance> DecalMaterial(TEXT("MaterialInstanceConstant'/Game/Materials/MI_DecalRing.MI_DecalRing'"));
-	if(DecalMaterial.Object != nullptr)
-	{
-		SelectionDecalComponent->SetMaterial(0,DecalMaterial.Object);
-	}
+
 	SelectionDecalComponent->SetVisibility(false);
 	this->GetMesh()->SetReceivesDecals(false);
 	
