@@ -222,22 +222,15 @@ void ACorePlayerController::ResetRotation()
 
 
 // Selection functions
-FVector ACorePlayerController::GetTraceUnderCursor()
+AActor* ACorePlayerController::GetTraceUnderCursor(ETraceTypeQuery TraceChannel)
 {
 	FHitResult Hit;
-	GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery19, true, Hit);
+	GetHitResultUnderCursorByChannel(TraceChannel, true, Hit);
 
-	if (Hit.bBlockingHit)
+	if (Hit.GetActor())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TraceLocation %f %f %f\t"), Hit.ImpactPoint.X, Hit.ImpactPoint.Y, Hit.ImpactPoint.Z);
-		if(Cast<ISelectionInterface>(Hit.GetActor()))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("SelectionInterface!"));
-			Cast<ISelectionInterface>(Hit.GetActor())->ISelectionInterface::Execute_SelectActor(Hit.GetActor());
-			
-		}
 
-		return Hit.ImpactPoint;
+		return Hit.GetActor();
 	}
-	return FVector(0, 0, 0);
+	return nullptr;
 }

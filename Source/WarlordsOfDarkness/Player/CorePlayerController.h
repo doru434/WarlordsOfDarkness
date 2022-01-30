@@ -98,6 +98,6 @@ protected:
 
 	// Selection functions
 	UFUNCTION(BlueprintCallable)
-	FVector GetTraceUnderCursor();
+	AActor* GetTraceUnderCursor(ETraceTypeQuery TraceChannel);
 	
 };
