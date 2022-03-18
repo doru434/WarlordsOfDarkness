@@ -7,6 +7,8 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+struct FWODCharacterData;
+class UDecalComponent;
  UENUM(BlueprintType)
  enum class EFriendOrFoe : uint8 {
       Friend = 0 UMETA(DisplayName = "Friend"),
@@ -21,16 +23,20 @@ class WOD_API ABaseCharacter : public ACharacter, public ISelectionInterface
 public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
-
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Code Variables")
-	class UDecalComponent* SelectionDecalComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "aaCode Variables")
+	UDecalComponent* SelectionDecalComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Code Variables")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "aaCode Variables")
 	EFriendOrFoe E_FriendOrFoe;
+	
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "aaCode Variables")
+	//TSubclassOf<FWODCharacterData> CharacterData;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

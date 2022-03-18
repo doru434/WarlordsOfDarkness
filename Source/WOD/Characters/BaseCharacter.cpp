@@ -2,6 +2,7 @@
 
 
 #include "WOD/Characters/BaseCharacter.h"
+#include "WOD/Characters/WODCharacterData.h"
 #include "Components/DecalComponent.h"
 
 // Sets default values
@@ -9,6 +10,7 @@ ABaseCharacter::ABaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
 	SelectionDecalComponent = CreateDefaultSubobject<UDecalComponent>(TEXT("SelectionDecal"));
 	SelectionDecalComponent->SetupAttachment(RootComponent);
 	SelectionDecalComponent->SetRelativeRotation(FRotator(90.f,0.f,0.f));
