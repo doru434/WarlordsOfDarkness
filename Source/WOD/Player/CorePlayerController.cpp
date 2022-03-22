@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+	// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "WOD/Player/CorePlayerController.h"
@@ -58,10 +58,23 @@ void ACorePlayerController::SetupInputComponent()
 void ACorePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	if(IsValid(CameraData))
+	{
+		CameraParamsData = FCameraParamsData(CameraData);
+	}
+	else
+	{
+		CameraParamsData = FCameraParamsData();
+	}
 	APlayerPawn* PlayerPawn = Cast<APlayerPawn>(GetPawn());
 	if (PlayerPawn)
 	{
-		PlayerPawn->SpringArmComponent->SetRelativeRotation(FMath::Lerp(MinCameraRotation, MaxCameraRotation, (PlayerPawn->SpringArmComponent->TargetArmLength - MinCameraHeight) / (MaxCameraHeight - MinCameraHeight)));
+		PlayerPawn->SpringArmComponent->TargetArmLength = CameraParamsData.MinCameraHeight;
+	/*	PlayerPawn->SpringArmComponent->SetRelativeRotation(
+			FMath::Lerp(CameraParamsData.MinCameraRotation,
+				CameraParamsData.MaxCameraRotation,
+				(PlayerPawn->SpringArmComponent->TargetArmLength - CameraParamsData.MinCameraHeight) / (CameraParamsData.MaxCameraHeight - CameraParamsData.MinCameraHeight)
+				));*/
 	}
 }
 // End PlayerController interface
@@ -96,7 +109,8 @@ void ACorePlayerController::MoveUp(float Amount)
 	if (Amount)
 	{
 		FVector Forward = GetPawn()->GetActorForwardVector();
-		GetPawn()->AddMovementInput(Forward, Amount * CameraSpeed);
+		//GetPawn()->AddMovementInput(Forward, Amount * CameraParamsData.CameraSpeed);
+		GetPawn()->AddActorWorldOffset(Forward*(Amount * CameraParamsData.CameraSpeed));
 	}
 }
 void ACorePlayerController::MoveRight(float Amount)
@@ -104,7 +118,7 @@ void ACorePlayerController::MoveRight(float Amount)
 	if (Amount)
 	{
 		FVector Right = GetPawn()->GetActorRightVector();
-		GetPawn()->AddMovementInput(Right, Amount * CameraSpeed);
+		GetPawn()->AddActorWorldOffset(Right*(Amount * CameraParamsData.CameraSpeed));
 	}
 }
 void ACorePlayerController::MouseCameraMovementActivation()
@@ -133,23 +147,23 @@ void ACorePlayerController::MoveCameraByMouse()
 	FVector Forward = GetPawn()->GetActorForwardVector();
 	FVector Right = GetPawn()->GetActorRightVector();
 
-	if (MouseLocationX < ScreenMargin)
+	if (MouseLocationX < CameraParamsData.ScreenMargin)
 	{
-		GetPawn()->AddMovementInput(Right, -1 * CameraSpeed);
+		GetPawn()->AddMovementInput(Right, -1 * CameraParamsData.CameraSpeed);
 	}
-	if (MouseLocationX > GameViewportSize.X - ScreenMargin)
+	if (MouseLocationX > GameViewportSize.X - CameraParamsData.ScreenMargin)
 	{
-		GetPawn()->AddMovementInput(Right, 1 * CameraSpeed);
-	}
-
-	if (MouseLocationY > GameViewportSize.Y - ScreenMargin)
-	{
-		GetPawn()->AddMovementInput(Forward, -1 * CameraSpeed);
+		GetPawn()->AddMovementInput(Right, 1 * CameraParamsData.CameraSpeed);
 	}
 
-	if (MouseLocationY < ScreenMargin)
+	if (MouseLocationY > GameViewportSize.Y - CameraParamsData.ScreenMargin)
 	{
-		GetPawn()->AddMovementInput(Forward, 1 * CameraSpeed);
+		GetPawn()->AddMovementInput(Forward, -1 * CameraParamsData.CameraSpeed);
+	}
+
+	if (MouseLocationY < CameraParamsData.ScreenMargin)
+	{
+		GetPawn()->AddMovementInput(Forward, 1 * CameraParamsData.CameraSpeed);
 	}
 }
 // End camera movement functions
@@ -166,19 +180,24 @@ void ACorePlayerController::ZoomCamera(float Amount)
 		{
 			if (Amount > 0)
 			{
-				if (PlayerPawn->SpringArmComponent->TargetArmLength + (Amount * CameraZoomingSpeed) <= MaxCameraHeight)
+				if (PlayerPawn->SpringArmComponent->TargetArmLength + (Amount * CameraParamsData.CameraZoomingSpeed) <= CameraParamsData.MaxCameraHeight)
 				{
-					PlayerPawn->SpringArmComponent->TargetArmLength = PlayerPawn->SpringArmComponent->TargetArmLength + (Amount * CameraZoomingSpeed);
+					PlayerPawn->SpringArmComponent->TargetArmLength = PlayerPawn->SpringArmComponent->TargetArmLength + (Amount * CameraParamsData.CameraZoomingSpeed);
 				}
 			}
 			else
 			{
-				if (PlayerPawn->SpringArmComponent->TargetArmLength - (Amount * CameraZoomingSpeed) >= MinCameraHeight)
+				if (PlayerPawn->SpringArmComponent->TargetArmLength - (Amount * CameraParamsData.CameraZoomingSpeed) >= CameraParamsData.MinCameraHeight)
 				{
-					PlayerPawn->SpringArmComponent->TargetArmLength = PlayerPawn->SpringArmComponent->TargetArmLength + (Amount * CameraZoomingSpeed);
+					PlayerPawn->SpringArmComponent->TargetArmLength = PlayerPawn->SpringArmComponent->TargetArmLength + (Amount * CameraParamsData.CameraZoomingSpeed);
 				}
 			}
-			PlayerPawn->SpringArmComponent->SetRelativeRotation(FMath::Lerp(MinCameraRotation, MaxCameraRotation, (PlayerPawn->SpringArmComponent->TargetArmLength - MinCameraHeight) / (MaxCameraHeight - MinCameraHeight)));
+			PlayerPawn->SpringArmComponent->SetRelativeRotation(
+				FMath::Lerp(CameraParamsData.MinCameraRotation,
+					CameraParamsData.MaxCameraRotation,
+					(PlayerPawn->SpringArmComponent->TargetArmLength - CameraParamsData.MinCameraHeight) / (CameraParamsData.MaxCameraHeight - CameraParamsData.MinCameraHeight)
+					)
+					);
 		}
 	}
 }
@@ -204,7 +223,7 @@ void ACorePlayerController::RotateCamera(float Amount)
 void ACorePlayerController::RotateCameraByMouse()
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Rotate Amount: %f"), DeltaMousePosition.X * (-0.05));
-	RotateCamera(DeltaMousePosition.X * (RotationSpeed));
+	RotateCamera(DeltaMousePosition.X * (CameraParamsData.RotationSpeed));
 }
 void ACorePlayerController::ResetRotation()
 {

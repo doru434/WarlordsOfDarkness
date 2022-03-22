@@ -3,10 +3,65 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CameraData.h"
 #include "Components/CanvasPanelSlot.h"
 #include "GameFramework/PlayerController.h"
 #include "CorePlayerController.generated.h"
 
+class UCameraData;
+USTRUCT(BlueprintType)
+struct FCameraParamsData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float ScreenMargin;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float CameraSpeed;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float RotationSpeed;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float CameraZoomingSpeed;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float MaxCameraHeight;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float MinCameraHeight;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FRotator MinCameraRotation;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FRotator MaxCameraRotation;
+
+	FCameraParamsData()
+	{
+		ScreenMargin = 20.f;
+		CameraSpeed = 1.f;
+		RotationSpeed = 1.f;
+		CameraZoomingSpeed = 10.f;
+		MaxCameraHeight = 200.f;
+		MinCameraHeight = 100.f;
+		MinCameraRotation = FRotator(-35.f, 0.f, 0.f);
+		MaxCameraRotation = FRotator(70.f, 0.f, 0.f);
+	}
+	
+	FCameraParamsData(TSubclassOf<UCameraData> CameraData)
+	{
+		ScreenMargin = CameraData.GetDefaultObject()->ScreenMargin;
+		CameraSpeed = CameraData.GetDefaultObject()->CameraSpeed;
+		RotationSpeed = CameraData.GetDefaultObject()->RotationSpeed;
+		CameraZoomingSpeed = CameraData.GetDefaultObject()->CameraZoomingSpeed;
+		MaxCameraHeight = CameraData.GetDefaultObject()->MaxCameraHeight;
+		MinCameraHeight = CameraData.GetDefaultObject()->MinCameraHeight;
+		MinCameraRotation = CameraData.GetDefaultObject()->MinCameraRotation;
+		MaxCameraRotation = CameraData.GetDefaultObject()->MaxCameraRotation;
+	}
+};
 /**
  * 
  */
@@ -19,7 +74,7 @@ public:
 
 protected:
 	// Camera properties
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ScreenMargin = 40.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -42,14 +97,20 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FRotator MaxCameraRotation = FRotator(-70.f, 0.f, 0.f);
-
+	*/
+	
 	UPROPERTY()
 	bool bCameraMovementMouseButtonPressed = false;
 	UPROPERTY()
 	FVector2D BaseMousePosition = FVector2D(0.f, 0.f);
 	UPROPERTY()
 	FVector2D DeltaMousePosition = FVector2D(0.f, 0.f);
+    
+	
+    FCameraParamsData CameraParamsData;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCameraData> CameraData;
 	// End camera properties
 
 	// === Functions ===
