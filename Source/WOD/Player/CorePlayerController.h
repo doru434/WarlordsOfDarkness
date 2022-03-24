@@ -8,12 +8,20 @@
 #include "GameFramework/PlayerController.h"
 #include "CorePlayerController.generated.h"
 
+
 class UCameraData;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSelection);
+
+
 USTRUCT(BlueprintType)
 struct FCameraParamsData
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	bool AllowRotation;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float ScreenMargin;
 
@@ -48,6 +56,7 @@ struct FCameraParamsData
 		MinCameraHeight = 100.f;
 		MinCameraRotation = FRotator(-35.f, 0.f, 0.f);
 		MaxCameraRotation = FRotator(70.f, 0.f, 0.f);
+		AllowRotation = true;
 	}
 	
 	FCameraParamsData(TSubclassOf<UCameraData> CameraData)
@@ -60,6 +69,7 @@ struct FCameraParamsData
 		MinCameraHeight = CameraData.GetDefaultObject()->MinCameraHeight;
 		MinCameraRotation = CameraData.GetDefaultObject()->MinCameraRotation;
 		MaxCameraRotation = CameraData.GetDefaultObject()->MaxCameraRotation;
+		AllowRotation = CameraData.GetDefaultObject()->AllowRotation;
 	}
 };
 /**
@@ -72,32 +82,9 @@ class WOD_API ACorePlayerController : public APlayerController
 public:
 	ACorePlayerController();
 
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnSelection OnSelectionDelegate;
 protected:
-	// Camera properties
-	/*UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float ScreenMargin = 40.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float CameraSpeed = 2.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float RotationSpeed = 1.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float CameraZoomingSpeed = 40;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MaxCameraHeight = 2400.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MinCameraHeight = 600.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FRotator MinCameraRotation = FRotator(-35.f, 0.f, 0.f);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FRotator MaxCameraRotation = FRotator(-70.f, 0.f, 0.f);
-	*/
 	
 	UPROPERTY()
 	bool bCameraMovementMouseButtonPressed = false;
@@ -159,6 +146,5 @@ protected:
 
 	// Selection functions
 	UFUNCTION(BlueprintCallable)
-	AActor* GetTraceUnderCursor(ETraceTypeQuery TraceChannel);
-	
+	FHitResult GetTraceUnderCursor(ETraceTypeQuery TraceChannel);
 };

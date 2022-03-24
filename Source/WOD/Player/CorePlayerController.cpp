@@ -33,7 +33,7 @@ void ACorePlayerController::PlayerTick(float DeltaTime)
 		DeltaMousePosition.X = BaseMousePosition.X - NewMousePosition.X;
 		DeltaMousePosition.Y = BaseMousePosition.Y - NewMousePosition.Y;
 
-		//ZoomCameraByMouse();
+		ZoomCameraByMouse();
 		RotateCameraByMouse();
 
 		BaseMousePosition = NewMousePosition;
@@ -69,12 +69,12 @@ void ACorePlayerController::BeginPlay()
 	APlayerPawn* PlayerPawn = Cast<APlayerPawn>(GetPawn());
 	if (PlayerPawn)
 	{
-		PlayerPawn->SpringArmComponent->TargetArmLength = CameraParamsData.MinCameraHeight;
-	/*	PlayerPawn->SpringArmComponent->SetRelativeRotation(
+		PlayerPawn->SpringArmComponent->TargetArmLength =  CameraParamsData.MinCameraHeight+ ((CameraParamsData.MaxCameraHeight - CameraParamsData.MinCameraHeight)/2);
+		PlayerPawn->SpringArmComponent->SetRelativeRotation(
 			FMath::Lerp(CameraParamsData.MinCameraRotation,
 				CameraParamsData.MaxCameraRotation,
 				(PlayerPawn->SpringArmComponent->TargetArmLength - CameraParamsData.MinCameraHeight) / (CameraParamsData.MaxCameraHeight - CameraParamsData.MinCameraHeight)
-				));*/
+				));
 	}
 }
 // End PlayerController interface
@@ -172,6 +172,7 @@ void ACorePlayerController::MoveCameraByMouse()
 // Camera rotation functions
 void ACorePlayerController::ZoomCamera(float Amount)
 {
+	
 	APlayerPawn* PlayerPawn;
 	if (Amount)
 	{
@@ -192,12 +193,15 @@ void ACorePlayerController::ZoomCamera(float Amount)
 					PlayerPawn->SpringArmComponent->TargetArmLength = PlayerPawn->SpringArmComponent->TargetArmLength + (Amount * CameraParamsData.CameraZoomingSpeed);
 				}
 			}
-			PlayerPawn->SpringArmComponent->SetRelativeRotation(
+			if(CameraParamsData.AllowRotation)
+			{
+				PlayerPawn->SpringArmComponent->SetRelativeRotation(
 				FMath::Lerp(CameraParamsData.MinCameraRotation,
 					CameraParamsData.MaxCameraRotation,
 					(PlayerPawn->SpringArmComponent->TargetArmLength - CameraParamsData.MinCameraHeight) / (CameraParamsData.MaxCameraHeight - CameraParamsData.MinCameraHeight)
 					)
 					);
+			}
 		}
 	}
 }
@@ -208,15 +212,18 @@ void ACorePlayerController::ZoomCameraByMouse()
 }
 void ACorePlayerController::RotateCamera(float Amount)
 {
-	APlayerPawn* PlayerPawn;
-	if (Amount != 0)
+	if(CameraParamsData.AllowRotation)
 	{
-		PlayerPawn = Cast<APlayerPawn>(GetPawn());
-		if (PlayerPawn)
+		APlayerPawn* PlayerPawn;
+		if (Amount != 0)
 		{
-			FRotator Rotation = PlayerPawn->GetActorRotation();
-			Rotation.Yaw = Rotation.Yaw + Amount;
-			PlayerPawn->SetActorRotation(Rotation);
+			PlayerPawn = Cast<APlayerPawn>(GetPawn());
+			if (PlayerPawn)
+			{
+				FRotator Rotation = PlayerPawn->GetActorRotation();
+				Rotation.Yaw = Rotation.Yaw + Amount;
+				PlayerPawn->SetActorRotation(Rotation);
+			}
 		}
 	}
 }
@@ -241,15 +248,10 @@ void ACorePlayerController::ResetRotation()
 
 
 // Selection functions
-AActor* ACorePlayerController::GetTraceUnderCursor(ETraceTypeQuery TraceChannel)
+FHitResult ACorePlayerController::GetTraceUnderCursor(ETraceTypeQuery TraceChannel)
 {
 	FHitResult Hit;
-	GetHitResultUnderCursorByChannel(TraceChannel, true, Hit);
-
-	if (Hit.GetActor())
-	{
-
-		return Hit.GetActor();
-	}
-	return nullptr;
+	GetHitResultUnderCursorByChannel(TraceChannel, false, Hit);
+	
+	return Hit;
 }

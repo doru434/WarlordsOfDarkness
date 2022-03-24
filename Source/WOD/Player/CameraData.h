@@ -14,6 +14,10 @@ class WOD_API UCameraData : public UObject
 {
 	GENERATED_BODY()
 public:
+
+	UPROPERTY(EditDefaultsOnly)
+	bool AllowRotation;
+	
 	UPROPERTY(EditDefaultsOnly)
 	float ScreenMargin;
 
