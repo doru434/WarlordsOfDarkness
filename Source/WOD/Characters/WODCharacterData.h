@@ -1,11 +1,15 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
+#include "CoreMinimal.h"
+#include "UObject/NoExportTypes.h"
 #include "WODCharacterData.generated.h"
 
+/**
+* 
+*/
+
 UENUM(BlueprintType)
-enum class Race : uint8
+enum class ERace : uint8
 {
 	HUMAN = 0 UMETA(DisplayName = "Human"),
 	STRYGAN = 1 UMETA(DisplayName = "Strygan"),
@@ -13,16 +17,17 @@ enum class Race : uint8
 	KARGOT = 3 UMETA(DisplayName = "Kargot")
 };
 
-USTRUCT(Blueprintable)
-struct FWODCharacterData
+UCLASS(Blueprintable)
+class WOD_API UWODCharacterData : public UObject
 {
 	GENERATED_BODY()
-	
+
+	public:
 	UPROPERTY(EditDefaultsOnly)
 	FName CharacterName;
 
 	UPROPERTY(EditDefaultsOnly)
-	Race ERace;
+	ERace Race;
 
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHP;

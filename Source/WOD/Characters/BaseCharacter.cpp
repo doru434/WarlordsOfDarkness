@@ -4,6 +4,7 @@
 #include "WOD/Characters/BaseCharacter.h"
 #include "WOD/Characters/WODCharacterData.h"
 #include "Components/DecalComponent.h"
+#include "WOD/Characters/PatrolPoint.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -24,7 +25,14 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if(IsValid(CharacterData))
+	{
+		WODCharacterDataStruct = FWODCharacterDataStruct(CharacterData);
+	}
+	else
+	{
+		WODCharacterDataStruct = FWODCharacterDataStruct();
+	}
 }
 
 // Called every frame
