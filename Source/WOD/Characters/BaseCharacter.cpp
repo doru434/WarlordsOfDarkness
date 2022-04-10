@@ -35,6 +35,7 @@ void ABaseCharacter::BeginPlay()
 	{
 		WODCharacterDataStruct = FWODCharacterDataStruct();
 	}
+	Health = WODCharacterDataStruct.MaxHP;
 }
 
 // Called every frame

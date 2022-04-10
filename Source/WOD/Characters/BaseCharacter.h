@@ -73,6 +73,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Code Variables")
 	float ChaseRange;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Code Variables")
+	float Health;
+	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,  Category = "Code Variables")
 	FWODCharacterDataStruct WODCharacterDataStruct;
 
