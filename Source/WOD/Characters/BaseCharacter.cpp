@@ -19,6 +19,8 @@ ABaseCharacter::ABaseCharacter()
 	E_FriendOrFoe = EFriendOrFoe::Foe;
 	SelectionDecalComponent->SetVisibility(false);
 	this->GetMesh()->SetReceivesDecals(false);
+	AttackRange = 150.f;
+	ChaseRange = 1000.f;
 }
 
 // Called when the game starts or when spawned

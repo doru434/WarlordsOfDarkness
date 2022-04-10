@@ -66,6 +66,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Code Variables")
 	EFriendOrFoe E_FriendOrFoe;
 
+	// TODO: Dynamic attack range depend on weapon/skill
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Code Variables")
+	float AttackRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Code Variables")
+	float ChaseRange;
+
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,  Category = "Code Variables")
 	FWODCharacterDataStruct WODCharacterDataStruct;
 
