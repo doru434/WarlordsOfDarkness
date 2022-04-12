@@ -55,7 +55,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void ABaseCharacter::SelectActor_Implementation()
 {
 	ISelectionInterface::SelectActor_Implementation();
-	UE_LOG(LogTemp, Warning, TEXT("SelectActor ABaseCharacter override"));
+	//UE_LOG(LogTemp, Warning, TEXT("SelectActor ABaseCharacter override"));
 	if(SelectionDecalComponent->IsVisible())
 	{
 		
@@ -69,7 +69,7 @@ void ABaseCharacter::SelectActor_Implementation()
 void ABaseCharacter::UnselectActor_Implementation()
 {
 	ISelectionInterface::UnselectActor_Implementation();
-	UE_LOG(LogTemp, Warning, TEXT("UnselectActor ABaseCharacter override"));
+	//UE_LOG(LogTemp, Warning, TEXT("UnselectActor ABaseCharacter override"));
 	if(SelectionDecalComponent->IsVisible())
 	{
 		SelectionDecalComponent->SetVisibility(false);

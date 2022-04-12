@@ -16,4 +16,9 @@ class WOD_API ABaseDetourCrowdAIController : public AAIController
 	GENERATED_BODY()
 	public:
 	ABaseDetourCrowdAIController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	
+	ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+
+
 };
