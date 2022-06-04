@@ -76,6 +76,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Code Variables")
 	float Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Code Variables")
+	float DamagePower;
 	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,  Category = "Code Variables")
 	FWODCharacterDataStruct WODCharacterDataStruct;
@@ -97,4 +100,5 @@ public:
 	virtual void UnselectActor_Implementation() override;
 
 	virtual bool IsDead_Implementation() override;
+	virtual float GetCharacterDamagePower_Implementation() override;
 };

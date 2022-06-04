@@ -26,7 +26,9 @@ public:
 	void InflictDamage(float Damage, AActor* ActorToDamage);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void ReceiveDamage(float Damage);
-	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	float GetCharacterDamagePower();
+    	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
     void Die();
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
