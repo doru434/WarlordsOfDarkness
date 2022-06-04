@@ -76,4 +76,12 @@ void ABaseCharacter::UnselectActor_Implementation()
 	}
 }
 
+bool ABaseCharacter::IsDead_Implementation()
+{
+	if(Health<=0)
+		return true;
+	else
+		return false;
+}
+
 

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "WOD/Systems/Selection/SelectionInterface.h"
+#include "WOD/Systems/Damage/DamageInterface.h"
 #include "WOD/Characters/WODCharacterData.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -48,7 +49,7 @@ struct FWODCharacterDataStruct
 	}
 };
 UCLASS()
-class WOD_API ABaseCharacter : public ACharacter, public ISelectionInterface
+class WOD_API ABaseCharacter : public ACharacter, public ISelectionInterface, public IDamageInterface
 {
 	GENERATED_BODY()
 
@@ -94,4 +95,6 @@ public:
 
 	virtual void SelectActor_Implementation() override;
 	virtual void UnselectActor_Implementation() override;
+
+	virtual bool IsDead_Implementation() override;
 };
