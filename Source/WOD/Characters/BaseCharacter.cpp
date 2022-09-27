@@ -20,6 +20,7 @@ ABaseCharacter::ABaseCharacter()
 	SelectionDecalComponent->SetVisibility(false);
 	this->GetMesh()->SetReceivesDecals(false);
 	AttackRange = 150.f;
+	DamagePower = 55.f;
 	ChaseRange = 1000.f;
 }
 
@@ -74,6 +75,19 @@ void ABaseCharacter::UnselectActor_Implementation()
 	{
 		SelectionDecalComponent->SetVisibility(false);
 	}
+}
+
+bool ABaseCharacter::IsDead_Implementation()
+{
+	if(Health<=0)
+		return true;
+	else
+		return false;
+}
+
+float ABaseCharacter::GetCharacterDamagePower_Implementation()
+{
+	return DamagePower;
 }
 
 
